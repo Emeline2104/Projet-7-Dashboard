@@ -54,8 +54,8 @@ def afficher_informations_client(client_id):
         response = requests.get(f"{api_url}/informations_client_brut/{client_id}") # à factoriser
         client_info = response.json()
         # Affiche les informations les plus importantes sur l'application
-        if 'application_info' in client_info:
-            afficher_informations_application(client_info['application_info'][0])
+        if 'informations_application' in client_info:
+            afficher_informations_application(client_info['informations_application'][0])
 
     except Exception as e:
         st.error(f"Une erreur s'est produite : {e}")

@@ -206,17 +206,19 @@ def afficher_informations_client(client_id):
         # Affiche les informations sur le client
         response = requests.get(f"{api_url}/informations_client_brut/{client_id}")
         client_info = response.json()
+        #st.write(client_info)
+        #st.write(client_info.keys())  # Affichez les clés du dictionnaire principal
         # Affiche les informations les plus importantes sur l'application
-        if 'application_info' in client_info:
-            afficher_informations_application(client_info['application_info'][0])
+        if 'informations_application' in client_info:
+            afficher_informations_application(client_info['informations_application'][0])
 
         # Affiche les informations sur le bureau
-        if 'bureau_info' in client_info:
-            afficher_informations_bureau(client_info['bureau_info'][0])
+        if 'informations_bureau' in client_info:
+            afficher_informations_bureau(client_info['informations_bureau'][0])
 
         # Affiche les informations sur les demandes précédentes
-        if 'previous_application_info' in client_info:
-            afficher_informations_previous_application(client_info['previous_application_info'][0])
+        if 'informations_previous_application' in client_info:
+            afficher_informations_previous_application(client_info['informations_previous_application'][0])
 
         # Affiche d'autres informations dans une liste déroulante
         # afficher_informations_supplementaires(client_info)
