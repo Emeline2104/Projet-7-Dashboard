@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run dashboard.Recherche_client.py --server.port $PORT
+web: sh setup.sh && streamlit run Recherche_client.py --server.port $PORT
