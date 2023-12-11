@@ -40,19 +40,7 @@ def make_predictions(client_id):
         st.error(f"Une erreur s'est produite lors des prédictions : {e}")
 
 if client_id:
-    response_target = requests.get(f"{api_url}/get_target/{client_id}")
-    # Affiche la TARGET du client
-    target_data = response_target.json()
-
-    # Ajoute une nouvelle section pour indiquer si le client a obtenu son prêt ou non
-    if 'TARGET' in target_data and not math.isnan(target_data['TARGET']):
-        if target_data['TARGET'] == 1:
-            st.warning("Le client n'a pas remboursé son prêt.")
-        else:
-            st.success("Le client a remboursé son prêt.")
-    else:
-        # Si la TARGET est NaN, effectue une prédiction et affiche les résultats
-        make_predictions(client_id)
+    make_predictions(client_id)
 else : 
     st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
 
