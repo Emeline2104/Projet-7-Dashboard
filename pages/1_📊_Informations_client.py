@@ -3,9 +3,9 @@ import streamlit as st
 import requests
 
 # Environnement local
-#api_url = "http://127.0.0.1:5001"
+api_url = "http://127.0.0.1:5001"
 # Environnement Heroku
-api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
+# api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 
 # Check que la clé 'client_id' est dans la session state
 if 'client_id' not in st.session_state:
@@ -193,7 +193,6 @@ correspondance_dict_previous_application_info = {
     'DAYS_TERMINATION': {'Titre': "Jours jusqu'à la Résiliation Attendue", 'Description': 'Nombre de jours avant la résiliation attendue par rapport à la demande actuelle', 'Unité': 'Jours'},
     'NFLAG_INSURED_ON_APPROVAL': {'Titre': 'Assurance Demandée', 'Description': 'Drapeau indiquant si le client a demandé une assurance pendant la demande précédente', 'Unité': ''}
 }
-
 
 # Fonction pour afficher les informations sur le client
 def afficher_informations_client(client_id):

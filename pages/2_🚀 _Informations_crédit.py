@@ -4,9 +4,9 @@ import requests
 import math 
 
 # Environnement local
-#api_url = "http://127.0.0.1:5001"
+api_url = "http://127.0.0.1:5001"
 # Environnement Heroku
-api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
+# api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 
 # Check que la clé 'client_id' est dans la session state
 if 'client_id' not in st.session_state:
@@ -14,6 +14,7 @@ if 'client_id' not in st.session_state:
 
 # Récupére l'ID client de la session state
 client_id = st.session_state.client_id
+client_info = st.session_state.client_info
 
 st.title("Page d'informations crédit")
 
@@ -27,6 +28,8 @@ def make_predictions(client_id):
         if response.status_code == 200:
             # Affiche les prédictions
             predictions = response.json()
+            st.session_state.target = predictions
+
             st.write("Prédictions pour le client :")
             # Interprétation des prédictions
             if predictions['predictions'] == 1:
@@ -53,6 +56,10 @@ def afficher_informations_client(client_id):
         # Affiche les informations sur le client
         response = requests.get(f"{api_url}/informations_client_brut/{client_id}") # à factoriser
         client_info = response.json()
+
+        # Enregistrez les informations du client dans la session_state
+        st.session_state.client_info = client_info
+        
         # Affiche les informations les plus importantes sur l'application
         if 'informations_application' in client_info:
             afficher_informations_application(client_info['informations_application'][0])
