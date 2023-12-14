@@ -1,7 +1,22 @@
-# 2_🚀_Informations_crédit.py
+"""
+Script 2_🚀_Informations_crédit.py
+
+Ce script Streamlit permet d'afficher les informations sur un client et d'effectuer des prédictions de crédit.
+
+Prérequis :
+- Streamlit doit être installé : pip install streamlit
+
+Le script utilise des fonctions pour organiser l'affichage des informations, notamment sur les prédictions de crédit
+et les informations sur le client. Des prédictions sont effectuées en appelant une API, et les résultats sont affichés.
+
+Le script utilise un environnement local par défaut, mais la variable `api_url` peut être modifiée pour l'environnement
+Heroku.
+
+"""
+
 import streamlit as st
 import requests
-import math 
+import math
 
 # Environnement local
 api_url = "http://127.0.0.1:5001"
@@ -12,26 +27,29 @@ api_url = "http://127.0.0.1:5001"
 if 'client_id' not in st.session_state:
     st.session_state.client_id = None
 
-# Récupére l'ID client de la session state
+# Récupère l'ID client de la session state
 client_id = st.session_state.client_id
 client_info = st.session_state.client_info
 
 st.title("Page d'informations crédit")
 
-# Fonction pour effectuer des prédictions
 def make_predictions(client_id):
-    try:
-        # Appelle l'API pour effectuer des prédictions
-        response = requests.get(f"{api_url}/predict/{client_id}")
+    """
+    Fonction pour effectuer des prédictions de crédit.
 
-        # Vérifie si la réponse est réussie (code 200)
+    Parameters:
+    - client_id (str): L'ID du client.
+
+    """
+    try:
+        with st.spinner('Patientez un instant pour la prédiction ...'):
+            response = requests.get(f"{api_url}/predict/{client_id}")
+
         if response.status_code == 200:
-            # Affiche les prédictions
             predictions = response.json()
             st.session_state.target = predictions
 
             st.write("Prédictions pour le client :")
-            # Interprétation des prédictions
             if predictions['predictions'] == 1:
                 st.warning("Le client n'a pas obtenu son prêt.")
             else:
@@ -44,51 +62,46 @@ def make_predictions(client_id):
 
 if client_id:
     make_predictions(client_id)
-else : 
+else:
     st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
 
-
-# Fonction pour afficher les informations sur le client
 def afficher_informations_client(client_id):
+    """
+    Fonction pour afficher les informations sur le client.
+
+    Parameters:
+    - client_id (str): L'ID du client.
+
+    """
     st.subheader("Informations crédit:")
 
     try:
-        # Affiche les informations sur le client
-        response = requests.get(f"{api_url}/informations_client_brut/{client_id}") # à factoriser
+        response = requests.get(f"{api_url}/informations_client_brut/{client_id}")
         client_info = response.json()
 
-        # Enregistrez les informations du client dans la session_state
         st.session_state.client_info = client_info
-        
-        # Affiche les informations les plus importantes sur l'application
+
         if 'informations_application' in client_info:
             afficher_informations_application(client_info['informations_application'][0])
 
     except Exception as e:
         st.error(f"Une erreur s'est produite : {e}")
 
-# Fonction pour afficher les informations les plus importantes sur l'application
 def afficher_informations_application(application_info):
-    # Informations sur le crédit
-    st.write(f"**Type de prêt:** {application_info['NAME_CONTRACT_TYPE']}")
-    # st.write(f"**Statut du bien:** {application_info['NAME_YIELD_GROUP']}")
-    # st.write(f"**Type de produit financier:** {application_info['NAME_PRODUCT_TYPE']}")
-    # st.write(f"**Durée du prêt (années):** {application_info['TERM']}")
-    # st.write(f"**Taux d'intérêt annuel (%):** {application_info['RATE_INTEREST_PRIVILEGED']}")
-    #st.write(f"**Type de paiement:** {application_info['NAME_PAYMENT_TYPE']}")
-    #st.write(f"**Type de garantie:** {application_info['NAME_TYPE_SUITE']}")
+    """
+    Fonction pour afficher les informations sur l'application de crédit.
 
-    # Informations sur le co-demandeur
+    Parameters:
+    - application_info (dict): Les informations sur l'application de crédit du client.
+
+    """
+    st.write(f"**Type de prêt:** {application_info['NAME_CONTRACT_TYPE']}")
     st.write(f"**Genre du co-demandeur:** {application_info['NAME_CONTRACT_TYPE']}")
     st.write(f"**Âge du co-demandeur:** {application_info['DAYS_BIRTH']}")
     st.write(f"**Revenu annuel du co-demandeur (€):** {application_info['AMT_INCOME_TOTAL']}")
-
-
 
 # Si l'ID client est défini, affiche les informations sur le client
 if client_id:
     afficher_informations_client(client_id)
 else:
     st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
-
-# To do : ajouter l'analyse de la feature importance + factoriser les infos redondantes avec le 1er 
