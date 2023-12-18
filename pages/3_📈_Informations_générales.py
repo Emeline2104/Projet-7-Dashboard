@@ -17,6 +17,8 @@ import requests
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
+import plotly.graph_objects as go
 
 # Environnement local
 api_url = "http://127.0.0.1:5001"
@@ -27,16 +29,17 @@ api_url = "http://127.0.0.1:5001"
 if 'client_id' not in st.session_state:
     st.session_state.client_id = None
     st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
-
-# Récupère l'ID client de la session state
-client_id = st.session_state.client_id
-client_info = st.session_state.client_info
-application_info = client_info['informations_application'][0]
+else : 
+    # Récupère l'ID client de la session state
+    client_id = st.session_state.client_id
+    client_info = st.session_state.client_info
+    application_info = client_info['informations_application'][0]
 st.title("Page d'informations générales")
 
 # Ajoutez une fonction pour obtenir les informations du groupe pour la comparaison
 def get_group_info_for_comparison(filters):
     api_url = 'http://127.0.0.1:5001/get_group_info'
+    # api_url = "https://projet-7-38cdf763d118.herokuapp.com/get_group_info"
     response = requests.get(api_url, params=filters)
     group_info = response.json()
     return group_info
@@ -50,6 +53,54 @@ def determine_age_group(age):
         return '40-50 ans'
     else:
         return 'Plus de 50 ans'
+
+def get_global_feature_importance():
+    # Appel de l'API pour obtenir l'importance globale des caractéristiques
+    st.header("Caractéristiques principales du modèle:")
+    response = requests.get(f"{api_url}/get_global_feature_importance")
+
+    if response.status_code == 200:
+        # Convertir la réponse JSON en DataFrame
+        importance_df = pd.DataFrame(response.json())
+
+        # Sélectionner les 20 caractéristiques les plus importantes
+        top_features = importance_df.head(20)
+        top_features = top_features[['Feature', 'Coefficient']]
+        
+        # Créer le graphique à barres avec Plotly
+        fig = go.Figure()
+
+        # Ajouter les barres avec la couleur grise
+        fig.add_trace(go.Bar(
+            x=top_features['Feature'],
+            y=top_features['Coefficient'],
+            marker_color='#808080',  # Couleur grise
+        ))
+
+        # Mise en forme du layout
+        fig.update_layout(
+            title='Top 20 des caractéristiques les plus importantes',
+            yaxis_title='Coefficient',
+            xaxis_title='Caractéristiques',
+            barmode='relative',
+        )
+
+        # Ajuster la taille du graphique
+        fig.update_layout(height=800)
+
+        # Streamlit app
+        st.plotly_chart(fig)
+
+        st.markdown(
+            """
+            Le graphique affiche les 20 facteurs les plus influents selon le modèle.
+            - Barres vers le haut : Impact positif. Par exemple, un revenu élevé favorise l'approbation du prêt.
+            - Barres vers le bas : Impact négatif. Par exemple, un historique de crédit problématique peut diminuer la probabilité d'approbation.
+            Explorez ces facteurs pour mieux comprendre comment le modèle prend ses décisions. 📊✨
+            """)
+    else:
+        st.error(f"Erreur lors de la récupération de l'importance globale des caractéristiques : {response.status_code}")
+
 
 if client_info:
     try:
@@ -90,7 +141,7 @@ if client_info:
             # Graphique 1 : Comparaison des probabilités de défaut de prêt
             fig, ax = plt.subplots()
             target_client = application_info['TARGET']
-            custom_palette = sns.color_palette(['#c44e52', '#55a868'])
+            custom_palette = sns.color_palette(['firebrick', 'seagreen'])
             colors = [custom_palette[0] if target_client > 0.15 else custom_palette[1],
                       custom_palette[0] if average_target_individual > 0.15 else custom_palette[1]]
 
@@ -139,5 +190,9 @@ if client_info:
             # Afficher le graphique dans Streamlit
             st.pyplot(fig)
 
+            get_global_feature_importance()
     except Exception as e:
         st.json({'error': str(e), 'status_code': 500})
+else : 
+    st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
+
