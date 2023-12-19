@@ -17,16 +17,12 @@ Remarques:
 
 import streamlit as st
 import requests
-from data.config import (
+from Data.config import (
     correspondance_dict_application_info,
     correspondance_dict_bureau_info,
     correspondance_dict_previous_application_info
 )
 
-# Environnement local
-api_url = "http://127.0.0.1:5001"
-# Environnement Heroku
-# api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 
 # Check que la clé 'client_id' est dans la session state
 if 'client_id' not in st.session_state:
@@ -157,8 +153,6 @@ def afficher_informations_supplementaires(client_info):
     with st.expander("Plus d'informations"):
         if 'POS_CASH_balance_info' in client_info:
             afficher_informations_pos_cash_balance(client_info['POS_CASH_balance_info'])
-        if 'bureau_info' in client_info:
-            afficher_informations_bureau(client_info['bureau_info'])
         if 'credit_card_balance_info' in client_info:
             afficher_informations_credit_card_balance(client_info['credit_card_balance_info'])
         if 'installments_payments_info' in client_info:

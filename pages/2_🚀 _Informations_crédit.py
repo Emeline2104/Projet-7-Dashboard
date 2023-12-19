@@ -28,10 +28,12 @@ api_url = "http://127.0.0.1:5001"
 if 'client_id' not in st.session_state:
     st.session_state.client_id = None
     st.session_state.client_info = None
+    st.session_state.client_features = None
 
 # Récupère l'ID client de la session state
 client_id = st.session_state.client_id
 client_info = st.session_state.client_info
+client_features = st.session_state.client_features
 
 st.title("Page d'informations crédit")
 
@@ -49,7 +51,7 @@ def load_classification_threshold():
         print(f"Erreur lors de la requête : {response.status_code}")
         return None 
 
-def make_predictions(client_id):
+def make_predictions(client_features):
     """
     Fonction pour effectuer des prédictions de crédit.
 
@@ -61,7 +63,7 @@ def make_predictions(client_id):
     seuil_classification=load_classification_threshold()
     try:
         with st.spinner('Patientez un instant pour la prédiction ...'):
-            response = requests.get(f"{api_url}/predict/{client_id}")
+            response = requests.post(f"{api_url}/predict", json=client_features)
 
         if response.status_code == 200:
             predictions = response.json()
@@ -73,6 +75,7 @@ def make_predictions(client_id):
             if 'prediction' in predictions and 'probability' in predictions:
                 prediction_value = predictions['prediction']
                 probability = predictions['probability']
+                probability = round(probability, 4)
 
                 if prediction_value == 1:
                     st.warning("Le client n'a pas obtenu son prêt.")
@@ -117,7 +120,7 @@ def make_predictions(client_id):
         st.error(f"Une erreur s'est produite lors des prédictions : {e}")
 
 
-def afficher_informations_client(client_id):
+def afficher_informations_client(client_info):
     """
     Fonction pour afficher les informations sur le client.
 
@@ -128,11 +131,6 @@ def afficher_informations_client(client_id):
     st.subheader("Informations crédit:")
 
     try:
-        response = requests.get(f"{api_url}/informations_client_brut/{client_id}")
-        client_info = response.json()
-
-        st.session_state.client_info = client_info
-
         if 'informations_application' in client_info:
             afficher_informations_application(client_info['informations_application'][0])
 
@@ -148,15 +146,14 @@ def afficher_informations_application(application_info):
 
     """
     st.write(f"**Type de prêt:** {application_info['NAME_CONTRACT_TYPE']}")
-    st.write(f"**Genre du co-demandeur:** {application_info['NAME_CONTRACT_TYPE']}")
     st.write(f"**Revenu annuel du co-demandeur (€):** {application_info['AMT_INCOME_TOTAL']}")
 
-def visualize_top_features(client_id):
+def visualize_top_features(client_features):
     st.subheader("Explication des caractéristiques relatives au choix de l'octroi du prêt:")
 
     # Obtention des features importance locale à partir de l'API 
     with st.spinner('Patientez un instant pour l\'affichage des caractéristiques de la prédiction ...'):
-        response = requests.get(f"{api_url}/get_importance-caracteristiques/{client_id}")
+        response = requests.post(f"{api_url}/get_importance-caracteristiques", json=client_features)
 
     if response.status_code == 200:
         # Extraire le contenu JSON de la réponse
@@ -208,8 +205,8 @@ def visualize_top_features(client_id):
 
 # Si l'ID client est défini, affiche les informations sur le client
 if client_id:
-    make_predictions(client_id)
-    afficher_informations_client(client_id)
-    visualize_top_features(client_id)
+    make_predictions(client_features)
+    afficher_informations_client(client_info)
+    visualize_top_features(client_features)
 else:
     st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')

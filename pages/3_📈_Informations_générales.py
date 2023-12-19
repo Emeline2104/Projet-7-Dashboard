@@ -15,8 +15,7 @@ Prérequis :
 import streamlit as st
 import requests
 import json
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -33,16 +32,35 @@ else :
     # Récupère l'ID client de la session state
     client_id = st.session_state.client_id
     client_info = st.session_state.client_info
+    client_features = st.session_state.client_features
     application_info = client_info['informations_application'][0]
+    application_train_test = st.session_state.application_train_test
 st.title("Page d'informations générales")
 
+def determine_age_group(age):
+    if -(age/365) < 30:
+        return 'Moins de 30 ans'
+    elif -(age/365) <= age < 40:
+        return '30-40 ans'
+    elif -(age/365) <= age < 50:
+        return '40-50 ans'
+    else:
+        return 'Plus de 50 ans'
+
+
 # Ajoutez une fonction pour obtenir les informations du groupe pour la comparaison
-def get_group_info_for_comparison(filters):
-    api_url = 'http://127.0.0.1:5001/get_group_info'
-    # api_url = "https://projet-7-38cdf763d118.herokuapp.com/get_group_info"
-    response = requests.get(api_url, params=filters)
-    group_info = response.json()
-    return group_info
+def get_group_info_for_comparison(filters, application_train_test):
+    filtered_data = application_train_test[['SK_ID_CURR', 'NAME_CONTRACT_TYPE', 'TARGET', 'DAYS_BIRTH', 'CODE_GENDER', 'OCCUPATION_TYPE', 'AMT_CREDIT', 'AMT_ANNUITY', 'AMT_INCOME_TOTAL']]
+    del application_train_test
+    if 'age_group' in filters:
+        filtered_data['AGE_GROUP'] = filtered_data['DAYS_BIRTH'].apply(determine_age_group)
+        filtered_data = filtered_data[filtered_data['AGE_GROUP'] == filters['age_group']]
+    if 'sex_filter' in filters:
+        filtered_data = filtered_data[filtered_data['CODE_GENDER'] == filters['sex']]
+    if 'job_filter' in filters:
+        filtered_data = filtered_data[filtered_data['OCCUPATION_TYPE'] == filters['job']]
+    # filtered_data_json = filtered_data.to_json(orient='records')
+    return filtered_data
 
 def determine_age_group(age):
     if -(age/365) < 30:
@@ -101,6 +119,17 @@ def get_global_feature_importance():
     else:
         st.error(f"Erreur lors de la récupération de l'importance globale des caractéristiques : {response.status_code}")
 
+def create_bar_chart(x, y, labels, title):
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=x, y=y, marker_color='#808080'))
+    fig.update_layout(
+        title=title,
+        yaxis_title='Coefficient',
+        xaxis_title='Caractéristiques',
+        barmode='relative',
+    )
+    fig.update_layout(height=800)
+    return fig
 
 if client_info:
     try:
@@ -132,63 +161,88 @@ if client_info:
                 st.write('Donnée associée du client:', filters['job'])
 
             # Obtenez les informations du groupe depuis l'API Flask en utilisant les filtres
-            group_info_for_comparison = get_group_info_for_comparison(filters)
-            group_info_for_comparison = json.loads(group_info_for_comparison)
-
+            group_info_for_comparison = get_group_info_for_comparison(filters, application_train_test)
+            del application_train_test
+            # group_info_for_comparison = json.loads(group_info_for_comparison)
             # Calcul de la moyenne des cibles pour les clients
-            average_target_individual = sum(entry['TARGET'] for entry in group_info_for_comparison) / len(group_info_for_comparison)
-
-            # Graphique 1 : Comparaison des probabilités de défaut de prêt
-            fig, ax = plt.subplots()
+            average_target_individual = group_info_for_comparison['TARGET'].mean()
             target_client = application_info['TARGET']
-            custom_palette = sns.color_palette(['firebrick', 'seagreen'])
-            colors = [custom_palette[0] if target_client > 0.15 else custom_palette[1],
-                      custom_palette[0] if average_target_individual > 0.15 else custom_palette[1]]
+            
+            # Graphique 1 : Comparaison des probabilités de défaut de prêt
+            fig = go.Figure()
 
-            sns.barplot(x=['Client', 'Moyenne pour les individus'], y=[target_client, average_target_individual], ax=ax, palette=colors)
+            # Ajouter les barres avec la couleur grise
+            fig.add_trace(go.Bar(
+                x=['Client', 'Moyenne pour les individus'],
+                y=[target_client, average_target_individual],
+                marker_color=['firebrick', 'seagreen']
+            ))
 
-            for i, value in enumerate([target_client, average_target_individual]):
-                ax.text(i, value, f'{value:.2f}', ha='center', va='bottom' if value > 0 else 'top', fontsize=10, color='black')
+            # Mise en forme du layout
+            fig.update_layout(
+                title='Comparaison des probabilités de défaut de prêt du client et des individus de comparaison',
+                yaxis_title='Moyenne des probabilités de défaut de prêt',
+                xaxis_title='Groupe',
+                barmode='relative',
+            )
 
-            ax.set_ylabel('Moyenne des probabilités de défaut de prêt')
-            ax.set_title('Comparaison des probabilités de défaut de prêt du client et des individus de comparaison')
+            # Ajuster la taille du graphique
+            fig.update_layout(height=400)
 
             # Afficher le graphique dans Streamlit
-            st.pyplot(fig)
+            st.plotly_chart(fig)
 
             # Graphique 2 : Comparaison des montants de demande de crédit
-            average_amt_credit_individual = sum(entry['AMT_CREDIT'] for entry in group_info_for_comparison) / len(group_info_for_comparison)
-            fig, ax = plt.subplots()
+            average_amt_credit_individual = group_info_for_comparison['AMT_CREDIT'].mean()
             amt_credit_client = application_info['AMT_CREDIT']
+        
+            fig_credit_amounts_comparison = go.Figure()
 
-            sns.barplot(x=['Client', 'Moyenne pour les individus'], y=[amt_credit_client, average_amt_credit_individual], ax=ax, palette=colors)
+            # Ajouter les barres avec la couleur grise
+            fig_credit_amounts_comparison.add_trace(go.Bar(
+                x=['Client', 'Moyenne pour les individus'],
+                y=[amt_credit_client, average_amt_credit_individual],
+                marker_color=['firebrick', 'seagreen']
+            ))
 
-            for i, value in enumerate([amt_credit_client, average_amt_credit_individual]):
-                ax.text(i, value, f'{value:.0f} €', ha='center', va='bottom' if value > 0 else 'top', fontsize=10, color='black')
+            # Mise en forme du layout
+            fig_credit_amounts_comparison.update_layout(
+                title='Comparaison des montants de prêt du client et des individus de comparaison',
+                yaxis_title='Moyenne des montants de demande de crédit',
+                xaxis_title='Groupe',
+                barmode='relative',
+            )
 
-            ax.set_ylabel('Moyenne des montants de demande de crédit')
-            ax.set_title('Comparaison des montants de prêt du client et des individus de comparaison')
+            # Ajuster la taille du graphique
+            fig_credit_amounts_comparison.update_layout(height=400)
 
             # Afficher le graphique dans Streamlit
-            st.pyplot(fig)
+            st.plotly_chart(fig_credit_amounts_comparison)
 
             # Graphique 3 : Comparaison des montants des annuités de crédit
-            amt_annuity_values = [entry['AMT_ANNUITY'] for entry in group_info_for_comparison if entry['AMT_ANNUITY'] is not None]
-            average_amt_annuity_individual = sum(amt_annuity_values) / len(amt_annuity_values)
-
-            fig, ax = plt.subplots()
+            average_amt_annuity_individual = group_info_for_comparison['AMT_ANNUITY'].mean()
             amt_annuity_client = application_info['AMT_ANNUITY']
-
-            sns.barplot(x=['Client', 'Moyenne pour les individus'], y=[amt_annuity_client, average_amt_annuity_individual], ax=ax, palette=colors)
-
-            for i, value in enumerate([amt_annuity_client, average_amt_annuity_individual]):
-                ax.text(i, value, f'{value:.0f} €', ha='center', va='bottom' if value > 0 else 'top', fontsize=10, color='black')
-
-            ax.set_ylabel('Moyenne des montants des annuités de crédit')
-            ax.set_title('Comparaison des annuités de prêt du client et des individus de comparaison')
             
-            # Afficher le graphique dans Streamlit
-            st.pyplot(fig)
+            fig_annuity_amounts_comparison = go.Figure()
+
+            # Ajouter les barres avec la couleur grise
+            fig_annuity_amounts_comparison.add_trace(go.Bar(
+                x=['Client', 'Moyenne pour les individus'],
+                y=[amt_annuity_client, average_amt_annuity_individual],
+                marker_color=['firebrick', 'seagreen']
+            ))
+
+            # Mise en forme du layout
+            fig_annuity_amounts_comparison.update_layout(
+                title='Comparaison des annuités de prêt du client et des individus de comparaison',
+                yaxis_title='Moyenne des montants des annuités de crédit',
+                xaxis_title='Groupe',
+                barmode='relative',
+            )
+
+            # Ajuster la taille du graphique
+            fig_annuity_amounts_comparison.update_layout(height=400)
+            st.plotly_chart(fig_annuity_amounts_comparison)
 
             get_global_feature_importance()
     except Exception as e:
