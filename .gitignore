@@ -1,6 +1,0 @@
-__pycache__/
-*.DS_Store
-*/__init__.py
-*__init__.*
-*.cpython-*
-venv/
