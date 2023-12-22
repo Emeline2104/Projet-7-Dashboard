@@ -23,7 +23,7 @@ Elles incluent des informations comportementales et financières.
   - Page 1 : Informations sur le modèle de scoring (*[4_💡_Informations_modèle.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/4_%F0%9F%92%A1_Informations_mod%C3%A8le.py)*);
 - Script des tests unitaires nécessaires pour le déploiement automatique (*[test_dashboard.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/tests/test_dashboard.py)*).
   
-#### Fichier introductif du dahsboard 
+#### Fichier introductif du dahsboard :
 Fichier introductif permettant de comprendre l'objectif du projet et le découpage des dossiers (*[]()*).
 Fichier listant les packages utilisés seront présents dans les dossiers (*[]()*).
 
@@ -31,9 +31,9 @@ Fichier listant les packages utilisés seront présents dans les dossiers (*[]()
 ### Structure du Projet
 Le projet est organisé de la manière suivante :
 
-- **.github/workflows**: 
-  - **tests.yml**: Fichier de configuration pour les workflows GitHub.
-- **Data/sampled**: Données sélectionnées pour le déploiement Cloud Heroku.
+- **.github/workflows** : 
+  - **tests.yml** : Fichier de configuration pour les workflows GitHub.
+- **Data/sampled** : Données sélectionnées pour le déploiement Cloud Heroku.
   - **POS_CASH_balance_selected.csv**
   - **application_train_selected.csv**
   - **bureau_balance_selected.csv**
@@ -49,15 +49,15 @@ Le projet est organisé de la manière suivante :
   - 4_💡_Informations_modèle.py
 - **tests**
   - test_dashboard.py: Script pour les tests unitaires du dashboard.
-- **.gitignore**: Fichier spécifiant les fichiers et dossiers à ignorer dans le suivi git.
-- **Procfile**: Fichier spécifiant les commandes à exécuter lors du déploiement de l'application sur Heroku.
-- **README.md**: Documentation principale du projet.
-- **Recherche_client.py**: Script principal de l'application Streamlit.
-- **client_features.csv**: Données de features des clients aggrégées à partir de l'API.
-- **makefile**: Fichier de configuration pour la compilation et l'exécution du projet.
-- **requirements.txt**: Liste des dépendances du projet.
-- **run_tests.sh**: Script pour exécuter les tests du projet sur GitHub.
-- **runtime.txt**:Fichier spécifiant la version de Python à utiliser pour le projet.
+- **.gitignore** : Fichier spécifiant les fichiers et dossiers à ignorer dans le suivi git.
+- **Procfile** : Fichier spécifiant les commandes à exécuter lors du déploiement de l'application sur Heroku.
+- **README.md** : Documentation principale du projet.
+- **Recherche_client.py** : Script principal de l'application Streamlit.
+- **client_features.csv** : Données de features des clients aggrégées à partir de l'API.
+- **makefile** : Fichier de configuration pour la compilation et l'exécution du projet.
+- **requirements.txt** : Liste des dépendances du projet.
+- **run_tests.sh** : Script pour exécuter les tests du projet sur GitHub.
+- **runtime.txt** :Fichier spécifiant la version de Python à utiliser pour le projet.
 
 ## Exigences
 
