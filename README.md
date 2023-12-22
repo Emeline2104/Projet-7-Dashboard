@@ -28,46 +28,9 @@ Fichier introductif permettant de comprendre l'objectif du projet et le découpa
 Fichier listant les packages utilisés seront présents dans les dossiers (*[]()*).
 
 
-Exécution du script :
-Pour exécuter le dashboard, assurez-vous d'avoir Python 3.11 ou supérieur installé et exécutez la commande suivante dans le terminal :
-
-bash
-Copy code
-streamlit run src/dashboard.py
-Assurez-vous également de personnaliser les chemins et les paramètres dans le fichier config.py selon les besoins de votre projet.
-
-Structure du Projet
+### Structure du Projet
 Le projet est organisé de la manière suivante :
 
-.github/workflows:
-tests.yml: Fichier de configuration pour les workflows GitHub.
-src: Le répertoire principal du code source.
-config.py: Fichier de configuration pour le projet.
-dashboard.py: Script principal de l'application Streamlit.
-test_dashboard.py: Script pour les tests unitaires du dashboard.
-.gitignore: Fichier spécifiant les fichiers et dossiers à ignorer dans le suivi git.
-Procfile: Fichier spécifiant les commandes à exécuter lors du déploiement de l'application sur Heroku.
-README.md: Documentation principale du projet.
-requirements.txt: Liste des dépendances du projet.
-Exigences
-Installation
-Pour exécuter le code de ce projet, vous aurez besoin de Python 3.11 ou supérieur. Installez les dépendances à l'aide du fichier requirements.txt.
-
-bash
-Copy code
-pip install -r requirements.txt
-Assurez-vous également de personnaliser les chemins et les paramètres dans le fichier config.py selon les besoins de votre projet.
-
-Exécution du script
-Pour exécuter le dashboard, assurez-vous d'avoir Python 3.11 ou supérieur installé et exécutez la commande suivante dans le terminal :
-
-bash
-Copy code
-streamlit run src/dashboard.py
-
-## Structure du Projet
-
-Le projet est organisé de la manière suivante :
 - **.github/workflows**: 
   - **tests.yml**: Fichier de configuration pour les workflows GitHub.
 - **Data/sampled**: Données sélectionnées pour le déploiement Cloud Heroku.
@@ -79,30 +42,22 @@ Le projet est organisé de la manière suivante :
   - **installments_payments_selected.csv**
   - **previous_application_selected.csv**
   - **test_x_selected_head.csv**
-- **scr**: Le répertoire principal du code source.
-  - **config.py**: Fichier de configuration pour le projet.
-  - **data_drift_analysis**: Contient les scripts liés à l'analyse de data drift.
-    - **data_drift.py**: Script d'analyse de data drift.
-    - **data_drift_report.html**: Rapport HTML généré à partir de l'analyse de data drift.
-  - **flask_api.py**: Script principal de l'API Flask.
-  - **models**: Contient les scripts liés à la modélisation.
-    - **feature_importance.py**: Script pour l'analyse de l'importance des fonctionnalités.
-    - **main.py**: Script principal pour le prétraitement et l'entraînement des modèles.
-    - **model_training.py**: Script contenant les fonctions d'entraînement des modèles.
-    - **models_selec.py**: Script pour la sélection des modèles.
-  - **models_saved**: Contient les modèles sauvegardés.
-  - **preprocessing**: Scripts pour le prétraitement des données.
-    - **aggregation.py**: Script pour l'agrégation des données.
-    - **pre_processing.py**: Script pour le nettoyage et l'ingénierie des fonctionnalités.
-  - **test_model.py**: Script pour les tests unitaires du modèle.
+- **pages** : Pages du dashboard
+  - 1_📊_Informations_client.py
+  - 2_🚀 _Informations_crédit.py
+  - 3_📈_Informations_comparaison.py
+  - 4_💡_Informations_modèle.py
+- **tests**
+  - test_dashboard.py: Script pour les tests unitaires du dashboard.
 - **.gitignore**: Fichier spécifiant les fichiers et dossiers à ignorer dans le suivi git.
-- **Procfile**: Fichier spécifiant les commandes à exécuter lors du déploiement de l'application.
+- **Procfile**: Fichier spécifiant les commandes à exécuter lors du déploiement de l'application sur Heroku.
 - **README.md**: Documentation principale du projet.
-- **feature_imortance_global.csv**: Fichier CSV contenant l'importance globale des fonctionnalités.
+- **Recherche_client.py**: Script principal de l'application Streamlit.
+- **client_features.csv**: Données de features des clients aggrégées à partir de l'API.
 - **makefile**: Fichier de configuration pour la compilation et l'exécution du projet.
 - **requirements.txt**: Liste des dépendances du projet.
 - **run_tests.sh**: Script pour exécuter les tests du projet sur GitHub.
-- **runtime.txt**: Fichier spécifiant la version de Python à utiliser pour le projet.
+- **runtime.txt**:Fichier spécifiant la version de Python à utiliser pour le projet.
 
 ## Exigences
 
@@ -123,10 +78,7 @@ pip install .
 Pour exécuter le script, assurez-vous d'avoir Python 3.11 ou supérieur installé et exécutez la commande suivante dans le terminal :
 
 ```bash
-python scr/models/main.py
+streamlit run Recherche_client.py
 ```
 Assurez-vous également de personnaliser les chemins et les paramètres dans le fichier [config.py]() selon les besoins de votre projet.
 Pour exécuter le code de ce projet, vous aurez besoin de Python 3.11 ou supérieur. Installez les dépendances à l'aide du fichier `requirements.txt`.
-
-```bash
-pip install -r requirements.txt
