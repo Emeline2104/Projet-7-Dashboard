@@ -28,7 +28,7 @@ Fichier introductif permettant de comprendre l'objectif du projet et le découpa
 Fichier listant les packages utilisés seront présents dans les dossiers (*[]()*).
 
 
-### Structure du Projet
+### Structure du Projet : 
 Le projet est organisé de la manière suivante :
 
 - **.github/workflows** : 
@@ -59,7 +59,7 @@ Le projet est organisé de la manière suivante :
 - **run_tests.sh** : Script pour exécuter les tests du projet sur GitHub.
 - **runtime.txt** :Fichier spécifiant la version de Python à utiliser pour le projet.
 
-## Exigences
+## Exigences : 
 
 ### Installation
 
