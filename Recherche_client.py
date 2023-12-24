@@ -149,8 +149,8 @@ def main():
         with st.spinner('Patientez un instant pour le chargement des données ...'):
             client_info = obtain_raw_client_info(client_id)
             st.session_state.client_info = client_info
-            data = read_data("https://projet-7-aws.s3.eu-north-1.amazonaws.com/data_agregg.csv")
-            application_train_test = read_data("Data/sampled/application_train_selected.csv")
+            data = read_data("Data/sampled/data_aggreg_selected2.csv")
+            application_train_test = read_data("Data/sampled/application_train_selected2.csv")
             st.session_state.application_train_test = application_train_test
             get_client_info(client_id, data)
         st.success('Vous pouvez accéder aux autres pages !')
