@@ -28,6 +28,7 @@ api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 if 'client_id' not in st.session_state:
     st.session_state.client_id = None
     st.session_state.client_info = None
+if 'client_features'not in st.session_state:
     st.session_state.client_features = None
 
 # Récupère l'ID client de la session state
