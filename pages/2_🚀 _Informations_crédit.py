@@ -176,7 +176,6 @@ def visualize_top_features(client_features):
         # Trie le DataFrame par l'amplitude de l'importance en ordre décroissant et sélectionnez les 20 meilleures caractéristiques
         top_features = importance_df.sort_values(by='Amplitude Importance', ascending=False).head(20)
         top_features = top_features[['Importance', 'Feature']]
-        st.write(top_features)
         # Créer le graphique à barres avec Plotly
         fig = go.Figure()
 
