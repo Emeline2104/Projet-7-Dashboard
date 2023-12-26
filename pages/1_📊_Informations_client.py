@@ -29,9 +29,9 @@ from Data.config import (
 # Check que la clé 'client_id' est dans la session state
 st.title("Page d'informations sur le client")
 if 'client_id' not in st.session_state:
+    st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
     st.session_state.client_id = None
     st.session_state.client_info = None
-    st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
 
 # Récupération de l'ID client de la session state
 client_id = st.session_state.client_id

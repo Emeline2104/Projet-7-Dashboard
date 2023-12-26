@@ -111,12 +111,11 @@ def get_column_name(indicator):
 st.title("Page de comparaison avec d'autres clients")
 # Check que la clé 'client_id' est dans la session state
 if 'client_id' not in st.session_state:
+    st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
     st.session_state.client_id = None
     st.session_state.client_info = None
     st.session_state.client_features = None
     st.session_state.application_train_test = None
-    application_info = []
-    st.write('Merci de vouloir indiquer un ID client dans "Recherche client".')
 else :
     # Récupère l'ID client de la session state
     client_id = st.session_state.client_id
