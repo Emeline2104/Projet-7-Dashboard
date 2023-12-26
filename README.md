@@ -19,14 +19,10 @@ Elles incluent des informations comportementales et financières.
 - Script principal du projet (*[Recherche_client.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/Recherche_client.py)*) qui contient la logique de l'application Streamlit avec les pages suivantes :
   - Page 1 : Informations sur le client (*[1_📊_Informations_client.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/1_%F0%9F%93%8A_Informations_client.py)*);
   - Page 2 : Informations sur la demande de crédit (*[2_🚀 _Informations_crédit.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/2_%F0%9F%9A%80%20_Informations_cr%C3%A9dit.py)*);
-  - Page 1 : Informations sur la comparaison entre le client et d'autres groupes (*[3_📈_Informations_comparaison.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/3_%F0%9F%93%88_Informations_comparaison.py))*);
-  - Page 1 : Informations sur le modèle de scoring (*[4_💡_Informations_modèle.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/4_%F0%9F%92%A1_Informations_mod%C3%A8le.py)*);
+  - Page 3 : Informations sur la comparaison entre le client et d'autres groupes (*[3_📈_Informations_comparaison.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/3_%F0%9F%93%88_Informations_comparaison.py)*);
+  - Page 4 : Informations sur le modèle de scoring (*[4_💡_Informations_modèle.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/pages/4_%F0%9F%92%A1_Informations_mod%C3%A8le.py)*);
 - Script des tests unitaires nécessaires pour le déploiement automatique (*[test_dashboard.py](https://github.com/Emeline2104/Projet-7-Dashboard/blob/dashboard/tests/test_dashboard.py)*).
   
-#### Fichier introductif du dahsboard :
-Fichier introductif permettant de comprendre l'objectif du projet et le découpage des dossiers (*[]()*).
-Fichier listant les packages utilisés seront présents dans les dossiers (*[]()*).
-
 
 ### Structure du Projet : 
 Le projet est organisé de la manière suivante :
@@ -42,6 +38,7 @@ Le projet est organisé de la manière suivante :
   - **installments_payments_selected.csv**
   - **previous_application_selected.csv**
   - **test_x_selected_head.csv**
+  - **config.py**
 - **pages** : Pages du dashboard
   - 1_📊_Informations_client.py
   - 2_🚀 _Informations_crédit.py
@@ -67,11 +64,6 @@ Pour exécuter le code de ce projet, vous aurez besoin de Python 3.11 ou supéri
 
 ```bash
 pip install -r requirements.txt
-```
-
-Le fichier setup.py est également inclus pour permettre l'installation et la distribution du projet en tant que package Python.
-```bash
-pip install .
 ```
 
 ### Execution du script
