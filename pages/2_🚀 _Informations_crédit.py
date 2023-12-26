@@ -20,7 +20,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 # Environnement local
-#api_url = "http://127.0.0.1:5001"
+# api_url = "http://127.0.0.1:5001"
 # Environnement Heroku
 api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 
@@ -38,6 +38,7 @@ client_features = st.session_state.client_features
 
 st.title("Page d'informations crédit")
 
+@st.cache_data
 def load_classification_threshold():
     """
     Charge le seuil de classification optimal à partir de l'API.
@@ -138,7 +139,7 @@ def afficher_informations_client(client_info):
             st.write(f"**Montant des biens pour lequel le crédit est octroyé (€):** {client_info['informations_application'][0]['AMT_GOODS_PRICE']}")
     except Exception as e:
         st.error(f"Une erreur s'est produite : {e}")
-
+        
 def visualize_top_features(client_features):
     """
     Visualise les caractéristiques les plus importantes pour la décision d'octroi de crédit.
@@ -175,6 +176,7 @@ def visualize_top_features(client_features):
         # Trie le DataFrame par l'amplitude de l'importance en ordre décroissant et sélectionnez les 20 meilleures caractéristiques
         top_features = importance_df.sort_values(by='Amplitude Importance', ascending=False).head(20)
         top_features = top_features[['Importance', 'Feature']]
+        st.write(top_features)
         # Créer le graphique à barres avec Plotly
         fig = go.Figure()
 

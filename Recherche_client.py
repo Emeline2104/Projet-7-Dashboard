@@ -37,6 +37,7 @@ from Data.config import (
     PREV_FILENAME,
     DATA_AGGREG_FILENAME,
 )
+import sys
 import streamlit as st
 import pandas as pd
 
@@ -156,8 +157,8 @@ def main():
             client_info = obtain_raw_client_info(client_id)
             # Verification si le client n'a pas été trouvé dans la base de données
             if not any(client_info.values()):
-                st.error(f"Client ID non trouvé dans la base de données, veuillez essayer avec un autre 'Client ID'.")
-                st.stop()
+                st.error("Client ID non trouvé dans la base de données, veuillez essayer avec un autre 'Client ID'.")
+                sys.exit()
             st.session_state.client_info = client_info
             data = read_data(DATA_AGGREG_FILENAME)
             application_train_test = read_data(APPLICATION_TRAIN_FILENAME)
