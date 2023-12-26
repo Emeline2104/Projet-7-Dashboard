@@ -156,7 +156,7 @@ def main():
             client_info = obtain_raw_client_info(client_id)
             # Verification si le client n'a pas été trouvé dans la base de données
             if not any(client_info.values()):
-                st.error(f"Client ID {client_id} non trouvé dans la base de données, veuillez essayer avec un autre 'Client ID'.")
+                st.error(f"Client ID non trouvé dans la base de données, veuillez essayer avec un autre 'Client ID'.")
                 st.stop()
             st.session_state.client_info = client_info
             data = read_data(DATA_AGGREG_FILENAME)
