@@ -4,3 +4,4 @@ __pycache__/
 *__init__.*
 *.cpython-*
 venv/
+selec.py

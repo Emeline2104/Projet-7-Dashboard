@@ -31,6 +31,12 @@ Note:
     Assurez-vous d'avoir installé toutes les dépendances nécessaires avant l'exécution.
 
 """
+from Data.config import (
+    APPLICATION_TRAIN_FILENAME,
+    BUREAU_FILENAME,
+    PREV_FILENAME,
+    DATA_AGGREG_FILENAME,
+)
 import streamlit as st
 import pandas as pd
 
@@ -100,11 +106,11 @@ def obtain_raw_client_data(client_id):
     """
     client_info = {}
     client_info['informations_application'] = obtain_info_by_table(
-        "Data/sampled/application_train_selected.csv", client_id)
+        APPLICATION_TRAIN_FILENAME, client_id)
     client_info['informations_bureau'] = obtain_info_by_table(
-        "Data/sampled/bureau_selected.csv", client_id)
+        BUREAU_FILENAME, client_id)
     client_info['informations_previous_application'] = obtain_info_by_table(
-        "Data/sampled/previous_application_selected.csv", client_id)
+        PREV_FILENAME, client_id)
     return client_info
 
 def obtain_raw_client_info(client_id):
@@ -149,8 +155,8 @@ def main():
         with st.spinner('Patientez un instant pour le chargement des données ...'):
             client_info = obtain_raw_client_info(client_id)
             st.session_state.client_info = client_info
-            data = read_data("Data/sampled/data_aggreg_selected2.csv")
-            application_train_test = read_data("Data/sampled/application_train_selected2.csv")
+            data = read_data(DATA_AGGREG_FILENAME)
+            application_train_test = read_data(APPLICATION_TRAIN_FILENAME)
             st.session_state.application_train_test = application_train_test
             get_client_info(client_id, data)
         st.success('Vous pouvez accéder aux autres pages !')
