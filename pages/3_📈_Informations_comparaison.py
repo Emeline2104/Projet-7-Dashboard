@@ -10,7 +10,7 @@ import requests
 import plotly.graph_objects as go
 
 # Environnement local
-api_url = "http://127.0.0.1:5001"
+# api_url = "http://127.0.0.1:5001"
 # Environnement Heroku
 api_url = "https://projet-7-38cdf763d118.herokuapp.com/"
 

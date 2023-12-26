@@ -1,3 +1,12 @@
+APPLICATION_TRAIN_FILENAME = "Data/sampled/application_train_selected.csv"
+BUREAU_FILENAME = "Data/sampled/bureau_selected.csv"
+BB_FILENAME = "Data/sampled/bureau_balance_selected.csv"
+PREV_FILENAME = "Data/sampled/previous_application_selected.csv"
+POS_FILENAME = "Data/sampled/POS_CASH_balance_selected.csv"
+INSTALLMENTS_PAYMENTS_FILENAME = "Data/sampled/installments_payments_selected.csv"
+CREDIT_CARD_BALANCE_FILENAME = "Data/sampled/credit_card_balance_selected.csv"
+DATA_AGGREG_FILENAME = "Data/sampled/data_aggreg_selected.csv"
+
 correspondance_dict_application_info = {
     'SK_ID_CURR': {'Titre': 'ID du prêt dans notre échantillon', 'Unité': ''},
     'TARGET': {'Titre': 'Variable cible', "Description": "1 - Client en difficulté de paiement : retard de paiement de plus de X jours sur au moins l'une des Y premières échéances du prêt dans notre échantillon, 0 - tous les autres cas", 'Unité': ''},
