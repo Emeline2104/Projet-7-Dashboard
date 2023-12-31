@@ -162,10 +162,9 @@ def visualize_top_features(client_features):
     # Obtention des features importance locale à partir de l'API 
     with st.spinner('Patientez un instant pour l\'affichage des caractéristiques de la prédiction ...'):
         response = requests.post(f"{api_url}/get_importance-caracteristiques", json=client_features)
-
+        
     if response.status_code == 200:
         # Extrais le contenu JSON de la réponse
-        st.write(importance_dict)
         importance_dict = response.json()
 
         # Conversion du dictionnaire en DataFrame
